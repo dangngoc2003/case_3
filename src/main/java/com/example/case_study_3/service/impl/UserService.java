@@ -15,12 +15,10 @@ public class UserService implements IUserService {
     public List<User> findALl() {
         return userRepository.findAll();
     }
-
     @Override
-    public User findById(Long id) {
+    public User finOne(Long id) {
         return userRepository.findById(id).orElse(null);
     }
-
     @Override
     public void save(User user) {
     userRepository.save(user);

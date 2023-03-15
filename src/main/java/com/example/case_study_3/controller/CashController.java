@@ -19,10 +19,8 @@ import java.util.List;
 @CrossOrigin("*")
 @RequestMapping("/cash")
 public class CashController {
-
     @Autowired
     public ICashService iCashService;
-
     @Autowired
     public ICategoryService iCategoryService;
     @GetMapping
@@ -37,6 +35,11 @@ public class CashController {
     @GetMapping("/categories")
     public ResponseEntity<List<Category>> findALl(){
         return new ResponseEntity<>(iCategoryService.findAll(),HttpStatus.OK);
+    }
+    @PostMapping("/categories/create")
+    public ResponseEntity<Void> createC(@RequestBody Category category){
+        iCategoryService.save(category);
+        return new ResponseEntity<>(HttpStatus.CONTINUE);
     }
     @PostMapping
     public ResponseEntity<Void> create(@RequestBody Cash cash){
@@ -68,12 +71,25 @@ public class CashController {
     public ResponseEntity<Double> getTotalByType(@PathVariable String type){
         return new ResponseEntity<>(iCashService.totalMoneyByType(type),HttpStatus.OK);
     }
-    @GetMapping("/total/{type}/{category}/{start}/{end}")
-    public ResponseEntity<Double> getTotalByTypeAndCategory(@PathVariable String type,@PathVariable Long category,String start,String end){
+    @GetMapping("/total/{name}/{type}/{category_id}/{start}/{end}")
+    public ResponseEntity<Double> getTotal(@PathVariable String name,
+                                           @PathVariable String type,
+                                           @PathVariable String category_id,
+                                           @PathVariable  String start,
+                                           @PathVariable  String end){
+        Long category=Long.valueOf(category_id);
         LocalDateTime starDate=  LocalDateTime.parse(start);
         LocalDateTime endDate=LocalDateTime.parse(end);
-        return new ResponseEntity<>(iCashService.totalMoneyByCategoryAndType(type,category,starDate,endDate),HttpStatus.OK);
+        return new ResponseEntity<>(iCashService.totalMoneyByCategoryAndType(name,type,category,starDate,endDate),HttpStatus.OK);
     }
-
-
+    @GetMapping("/{minMoney}/{maxMoney}")
+    public ResponseEntity<List<Cash>> findByMoney(@PathVariable Double minMoney,@PathVariable Double maxMoney){
+        return new ResponseEntity<>(iCashService.findCashByMoney(minMoney,maxMoney),HttpStatus.OK);
+    }
+    @GetMapping("/{type}/{min}/{max}")
+    public ResponseEntity<List<Cash>> findTypeAndDate(@PathVariable String type,@PathVariable String min,@PathVariable String max){
+        LocalDateTime starDate=  LocalDateTime.parse(min);
+        LocalDateTime endDate=LocalDateTime.parse(max);
+        return new ResponseEntity<>(iCashService.findByDate(type,starDate,endDate),HttpStatus.OK);
+    }
 }
