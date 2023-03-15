@@ -7,6 +7,7 @@ import com.example.case_study_3.service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,9 +68,9 @@ public class CashController {
         LocalDateTime endDate=LocalDateTime.parse(end);
         return new ResponseEntity<>(iCashService.searchByDate(starDate,endDate),HttpStatus.OK);
     }
-    @GetMapping("/total/{type}")
-    public ResponseEntity<Double> getTotalByType(@PathVariable String type){
-        return new ResponseEntity<>(iCashService.totalMoneyByType(type),HttpStatus.OK);
+    @GetMapping("/total/{userId}/{type}")
+    public ResponseEntity<Double> getTotalByType(@PathVariable Long userId,@PathVariable String type){
+        return new ResponseEntity<>(iCashService.totalMoneyByType(userId,type),HttpStatus.OK);
     }
     @GetMapping("/total/{name}/{type}/{category_id}/{start}/{end}")
     public ResponseEntity<Double> getTotal(@PathVariable String name,

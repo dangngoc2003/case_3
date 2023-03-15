@@ -1,6 +1,7 @@
 package com.example.case_study_3.controller;
-
+import com.example.case_study_3.model.Plan;
 import com.example.case_study_3.model.User;
+import com.example.case_study_3.service.IPlanService;
 import com.example.case_study_3.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,11 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/users")
@@ -22,6 +21,8 @@ import java.util.List;
 public class UserController {
     @Autowired
     private IUserService iUserService;
+    @Autowired
+    private IPlanService iPlanService;
     @Value("${upload.path}")
     private String link;
     @GetMapping()
@@ -64,11 +65,32 @@ public class UserController {
         iUserService.save(user);
         return new ResponseEntity<>( HttpStatus.CREATED);
     }
-
     @PostMapping(value = "/upload1")
     public ResponseEntity<?> createUpload1(@RequestPart("file") MultipartFile file) {
         System.out.println(file.getOriginalFilename());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
+    @GetMapping("/plan")
+    public ResponseEntity<List<Plan>> findALl(){
+        return new ResponseEntity<>(iPlanService.findAll(),HttpStatus.OK);
+    }
+    @PostMapping("/plan")
+    public ResponseEntity<Void> create(@RequestBody Plan plan){
+        iPlanService.save(plan);
+        return new ResponseEntity<>(HttpStatus.CONTINUE);
+    }
+    @PutMapping("/plan/{id}")
+    public ResponseEntity<Void> update(@PathVariable Long id,@RequestBody Plan plan){
+        Plan plan1=iPlanService.findOne(id);
+        if (plan1!=null){
+            iPlanService.save(plan);
+            return new ResponseEntity<>(HttpStatus.CONTINUE);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+    @DeleteMapping("/plan/{id}")
+    public ResponseEntity<Void> deletePlan(@PathVariable Long id){
+        iPlanService.delete(id);
+       return new ResponseEntity<>(HttpStatus.CONTINUE);
+    }
 }

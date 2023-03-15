@@ -35,8 +35,8 @@ public class CashService implements ICashService {
         return cashRepository.findByDateBetween(startDate,endDate);
     }
     @Override
-    public Double totalMoneyByType(String type) {
-        return cashRepository.getTotalMoneyByType(type);
+    public Double totalMoneyByType(Long userId ,String type) {
+        return cashRepository.getTotalMoneyByType(userId ,type);
     }
     @Override
     public Double totalMoneyByCategoryAndType(String name,String type, Long category,LocalDateTime start ,LocalDateTime end) {

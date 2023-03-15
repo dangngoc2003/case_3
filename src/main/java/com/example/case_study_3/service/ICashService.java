@@ -10,7 +10,7 @@ public interface ICashService {
         void save(Cash cash);
         void delete(Long id);
         List<Cash> searchByDate(LocalDateTime startDate, LocalDateTime endDate);
-        Double totalMoneyByType(String type);
+        Double totalMoneyByType(Long userId ,String type);
         Double totalMoneyByCategoryAndType(String name,String type,Long category,LocalDateTime start,LocalDateTime end);
         List<Cash> findCashByMoney(Double minMoney,Double maxMoney);
         List<Cash> findByDate(String type,LocalDateTime minDate,LocalDateTime maxDate);

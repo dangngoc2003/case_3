@@ -1,11 +1,9 @@
 package com.example.case_study_3.service.impl;
-
 import com.example.case_study_3.model.User;
 import com.example.case_study_3.repository.UserRepository;
 import com.example.case_study_3.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 @Service
 public class UserService implements IUserService {
