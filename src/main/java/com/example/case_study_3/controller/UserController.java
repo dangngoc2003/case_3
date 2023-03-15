@@ -70,27 +70,5 @@ public class UserController {
         System.out.println(file.getOriginalFilename());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-    @GetMapping("/plan")
-    public ResponseEntity<List<Plan>> findALl(){
-        return new ResponseEntity<>(iPlanService.findAll(),HttpStatus.OK);
-    }
-    @PostMapping("/plan")
-    public ResponseEntity<Void> create(@RequestBody Plan plan){
-        iPlanService.save(plan);
-        return new ResponseEntity<>(HttpStatus.CONTINUE);
-    }
-    @PutMapping("/plan/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id,@RequestBody Plan plan){
-        Plan plan1=iPlanService.findOne(id);
-        if (plan1!=null){
-            iPlanService.save(plan);
-            return new ResponseEntity<>(HttpStatus.CONTINUE);
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
-    @DeleteMapping("/plan/{id}")
-    public ResponseEntity<Void> deletePlan(@PathVariable Long id){
-        iPlanService.delete(id);
-       return new ResponseEntity<>(HttpStatus.CONTINUE);
-    }
+
 }
