@@ -92,4 +92,5 @@ public class CashController {
         LocalDateTime endDate=LocalDateTime.parse(max);
         return new ResponseEntity<>(iCashService.findByDate(type,starDate,endDate),HttpStatus.OK);
     }
+
 }

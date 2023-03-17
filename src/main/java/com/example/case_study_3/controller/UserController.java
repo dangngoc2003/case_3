@@ -1,5 +1,5 @@
 package com.example.case_study_3.controller;
-import com.example.case_study_3.model.Plan;
+
 import com.example.case_study_3.model.User;
 import com.example.case_study_3.service.IPlanService;
 import com.example.case_study_3.service.IUserService;
@@ -11,9 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/users")
@@ -25,6 +27,7 @@ public class UserController {
     private IPlanService iPlanService;
     @Value("${upload.path}")
     private String link;
+
     @GetMapping()
     public ResponseEntity<List<User>> findAll(){
         return new ResponseEntity<>(iUserService.findALl(),HttpStatus.OK);
@@ -33,11 +36,29 @@ public class UserController {
     public ResponseEntity<User> findOne(@PathVariable Long id){
         return new ResponseEntity<>(iUserService.finOne(id),HttpStatus.OK);
     }
+   @PostMapping("/register")
+    public ResponseEntity<Void> register(@RequestBody User user){
+    if (!user.getUsername().equals("")&&!user.getEmail().equals("")&&!user.getPassword().equals("")){
+        iUserService.save(user);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+    @PostMapping("/login")
+    public ResponseEntity<User> login(@RequestBody User user){
+        User user1=iUserService.findByUserNameAndPassWord(user.getUsername(), user.getPassword());
+    if(!user1.equals("")){
+        return new ResponseEntity<>(user,HttpStatus.OK);
+    }
+    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable Long id,@RequestBody User user){
        User user1= iUserService.finOne(id);
        if (user1!=null){
            iUserService.save(user);
+           return new ResponseEntity<>(HttpStatus.OK);
        }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

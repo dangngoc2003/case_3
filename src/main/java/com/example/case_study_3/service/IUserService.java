@@ -7,4 +7,5 @@ public interface IUserService {
     User finOne(Long id);
     void save(User user);
     void delete(Long id);
+    User findByUserNameAndPassWord(String username,String passWord);
 }
